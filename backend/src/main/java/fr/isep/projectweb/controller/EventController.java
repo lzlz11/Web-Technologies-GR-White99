@@ -1,7 +1,6 @@
 package fr.isep.projectweb.controller;
 
-import fr.isep.projectweb.model.dto.request.CreateEventRequest;
-import fr.isep.projectweb.model.dto.request.UpdateEventRequest;
+import fr.isep.projectweb.model.dto.request.EventRequest;
 import fr.isep.projectweb.model.entity.Event;
 import fr.isep.projectweb.model.entity.User;
 import fr.isep.projectweb.model.service.EventService;
@@ -27,7 +26,7 @@ public class EventController {
 
     @PostMapping
     @Operation(summary = "Create an event")
-    public Event createEvent(@RequestBody CreateEventRequest request, @AuthenticationPrincipal User user) {
+    public Event createEvent(@RequestBody EventRequest request, @AuthenticationPrincipal User user) {
         return eventService.createEvent(request, user);
     }
 
@@ -35,6 +34,12 @@ public class EventController {
     @Operation(summary = "Get all events")
     public List<Event> getAllEvents() {
         return eventService.getAllEvents();
+    }
+
+    @GetMapping("/search")
+    @Operation(summary = "Search events by keyword")
+    public List<Event> searchEvents(@RequestParam String keyword) {
+        return eventService.searchEvents(keyword);
     }
 
     @GetMapping("/{id}")
@@ -45,7 +50,7 @@ public class EventController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update an event")
-    public Event updateEvent(@PathVariable UUID id, @RequestBody UpdateEventRequest request) {
+    public Event updateEvent(@PathVariable UUID id, @RequestBody EventRequest request) {
         // TODO: Add authorization check to ensure only the organizer can update the event
         return eventService.updateEvent(id, request);
     }
