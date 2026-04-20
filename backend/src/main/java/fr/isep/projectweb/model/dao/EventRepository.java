@@ -13,6 +13,10 @@ import java.util.UUID;
 @Repository
 public interface EventRepository extends JpaRepository<Event, UUID> {
 
+    List<Event> findByOrganizerIdOrderByStartTimeAsc(UUID organizerId);
+
+    List<Event> findByLocationIdOrderByStartTimeAsc(UUID locationId);
+
     @Query("""
             SELECT e
             FROM Event e

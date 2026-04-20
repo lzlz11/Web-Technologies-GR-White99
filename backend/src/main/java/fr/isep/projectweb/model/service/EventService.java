@@ -51,6 +51,14 @@ public class EventService {
         return eventRepository.findAll();
     }
 
+    public List<Event> getEventsByOrganizerId(UUID organizerId) {
+        return eventRepository.findByOrganizerIdOrderByStartTimeAsc(organizerId);
+    }
+
+    public List<Event> getEventsByLocationId(UUID locationId) {
+        return eventRepository.findByLocationIdOrderByStartTimeAsc(locationId);
+    }
+
     public List<Event> searchEvents(String keyword) {
         if (keyword == null || keyword.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Keyword must not be blank");

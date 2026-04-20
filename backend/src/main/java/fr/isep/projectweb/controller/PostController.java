@@ -44,6 +44,24 @@ public class PostController {
         return postService.getAllPosts();
     }
 
+    @GetMapping("/user/{userId}")
+    @Operation(summary = "Get posts by user id")
+    public List<Post> getPostsByUserId(@PathVariable UUID userId) {
+        return postService.getPostsByUserId(userId);
+    }
+
+    @GetMapping("/location/{locationId}")
+    @Operation(summary = "Get posts by location id")
+    public List<Post> getPostsByLocationId(@PathVariable UUID locationId) {
+        return postService.getPostsByLocationId(locationId);
+    }
+
+    @GetMapping("/event/{eventId}")
+    @Operation(summary = "Get posts by event id")
+    public List<Post> getPostsByEventId(@PathVariable UUID eventId) {
+        return postService.getPostsByEventId(eventId);
+    }
+
     @GetMapping("/search")
     @Operation(summary = "Search posts by keyword")
     public List<Post> searchPosts(@RequestParam String keyword) {

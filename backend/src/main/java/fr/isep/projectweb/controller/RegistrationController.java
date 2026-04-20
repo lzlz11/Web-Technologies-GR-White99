@@ -44,6 +44,18 @@ public class RegistrationController {
         return registrationService.getAllRegistrations();
     }
 
+    @GetMapping("/event/{eventId}")
+    @Operation(summary = "Get registrations by event id")
+    public List<Registration> getRegistrationsByEventId(@PathVariable UUID eventId) {
+        return registrationService.getRegistrationsByEventId(eventId);
+    }
+
+    @GetMapping("/user/{userId}")
+    @Operation(summary = "Get registrations by user id")
+    public List<Registration> getRegistrationsByUserId(@PathVariable UUID userId) {
+        return registrationService.getRegistrationsByUserId(userId);
+    }
+
     @GetMapping("/{id}")
     @Operation(summary = "Get one registration by id")
     public Registration getRegistrationById(@PathVariable UUID id) {

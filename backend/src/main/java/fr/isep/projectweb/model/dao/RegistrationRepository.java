@@ -6,4 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface RegistrationRepository extends JpaRepository<Registration, UUID> {
+
+    java.util.List<Registration> findByEventIdOrderByRegisteredAtDesc(UUID eventId);
+
+    java.util.List<Registration> findByUserIdOrderByRegisteredAtDesc(UUID userId);
 }

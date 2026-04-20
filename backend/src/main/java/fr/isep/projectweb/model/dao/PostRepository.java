@@ -11,6 +11,12 @@ import java.util.UUID;
 
 public interface PostRepository extends JpaRepository<Post, UUID> {
 
+    List<Post> findByUserIdOrderByCreatedAtDesc(UUID userId);
+
+    List<Post> findByLocationIdOrderByCreatedAtDesc(UUID locationId);
+
+    List<Post> findByEventIdOrderByCreatedAtDesc(UUID eventId);
+
     @Query("""
             SELECT p
             FROM Post p

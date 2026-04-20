@@ -36,6 +36,18 @@ public class EventController {
         return eventService.getAllEvents();
     }
 
+    @GetMapping("/organizer/{organizerId}")
+    @Operation(summary = "Get events by organizer id")
+    public List<Event> getEventsByOrganizerId(@PathVariable UUID organizerId) {
+        return eventService.getEventsByOrganizerId(organizerId);
+    }
+
+    @GetMapping("/location/{locationId}")
+    @Operation(summary = "Get events by location id")
+    public List<Event> getEventsByLocationId(@PathVariable UUID locationId) {
+        return eventService.getEventsByLocationId(locationId);
+    }
+
     @GetMapping("/search")
     @Operation(summary = "Search events by keyword")
     public List<Event> searchEvents(@RequestParam String keyword) {

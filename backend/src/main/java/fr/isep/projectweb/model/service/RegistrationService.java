@@ -35,6 +35,14 @@ public class RegistrationService {
         return registrationRepository.findAll();
     }
 
+    public List<Registration> getRegistrationsByEventId(UUID eventId) {
+        return registrationRepository.findByEventIdOrderByRegisteredAtDesc(eventId);
+    }
+
+    public List<Registration> getRegistrationsByUserId(UUID userId) {
+        return registrationRepository.findByUserIdOrderByRegisteredAtDesc(userId);
+    }
+
     public Registration getRegistrationById(UUID id) {
         return findRegistrationById(id);
     }

@@ -42,6 +42,18 @@ public class PostService {
         return postRepository.findAll();
     }
 
+    public List<Post> getPostsByUserId(UUID userId) {
+        return postRepository.findByUserIdOrderByCreatedAtDesc(userId);
+    }
+
+    public List<Post> getPostsByLocationId(UUID locationId) {
+        return postRepository.findByLocationIdOrderByCreatedAtDesc(locationId);
+    }
+
+    public List<Post> getPostsByEventId(UUID eventId) {
+        return postRepository.findByEventIdOrderByCreatedAtDesc(eventId);
+    }
+
     public List<Post> searchPosts(String keyword) {
         if (keyword == null || keyword.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Keyword must not be blank");
