@@ -1,6 +1,6 @@
 package fr.isep.projectweb.model.dto.request;
 
-public class CreateLocationRequest {
+public class LocationRequest {
 
     private String name;
     private String description;
@@ -10,7 +10,7 @@ public class CreateLocationRequest {
     private Double latitude;
     private Double longitude;
 
-    public CreateLocationRequest() {
+    public LocationRequest() {
     }
 
     public String getName() {
