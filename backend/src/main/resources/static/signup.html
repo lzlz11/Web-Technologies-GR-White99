@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Signup</title>
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f3f7f2, #dbe8ff);
+            color: #1f2937;
+        }
+        main {
+            max-width: 720px;
+            margin: 48px auto;
+            padding: 32px;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+        }
+        h1 {
+            margin-top: 0;
+        }
+        form {
+            display: grid;
+            gap: 16px;
+        }
+        label {
+            display: grid;
+            gap: 6px;
+            font-weight: 600;
+        }
+        input, select {
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            font-size: 15px;
+        }
+        button {
+            padding: 12px 16px;
+            border: 0;
+            border-radius: 10px;
+            background: #0f766e;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        pre {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 16px;
+            border-radius: 12px;
+            overflow: auto;
+        }
+        .muted {
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Supabase Signup Test</h1>
+    <p class="muted">This page calls Supabase Auth directly. Set <code>SUPABASE_PUBLISHABLE_KEY</code> on the backend if config is missing.</p>
+
+    <form id="signup-form">
+        <label>
+            Full name
+            <input id="full-name" name="fullName" type="text" placeholder="Alice Martin" required>
+        </label>
+        <label>
+            Email
+            <input id="email" name="email" type="email" placeholder="alice@example.com" required>
+        </label>
+        <label>
+            Password
+            <input id="password" name="password" type="password" minlength="6" required>
+        </label>
+        <label>
+            Role
+            <select id="role" name="role">
+                <option value="PARENT" selected>Parent</option>
+                <option value="ORGANIZER">Organizer</option>
+            </select>
+        </label>
+        <button type="submit">Create account</button>
+    </form>
+
+    <h2>Result</h2>
+    <pre id="result">Waiting for input...</pre>
+
+    <p><a href="/login.html">Go to login page</a></p>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    async function loadConfig() {
+        const response = await fetch('/api/auth/config');
+        if (!response.ok) {
+            throw new Error('Failed to load backend config');
+        }
+        return response.json();
+    }
+
+    function showResult(value) {
+        document.getElementById('result').textContent = JSON.stringify(value, null, 2);
+    }
+
+    async function main() {
+        const config = await loadConfig();
+        if (!config.configured) {
+            showResult({
+                error: 'SUPABASE_PUBLISHABLE_KEY is missing on the backend',
+                expectedEnv: 'SUPABASE_PUBLISHABLE_KEY'
+            });
+            return;
+        }
+
+        const supabaseClient = window.supabase.createClient(
+            config.supabaseUrl,
+            config.supabasePublishableKey
+        );
+
+        document.getElementById('signup-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const fullName = document.getElementById('full-name').value;
+            const role = document.getElementById('role').value;
+
+            const { data, error } = await supabaseClient.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        full_name: fullName,
+                        role
+                    }
+                }
+            });
+
+            showResult({
+                error,
+                data
+            });
+        });
+    }
+
+    main().catch(error => showResult({ error: error.message }));
+</script>
+</body>
+</html>
