@@ -101,6 +101,12 @@ export const constantRoutes = [
         name: 'MainEvent',
         meta: { title: 'Accessible-events', icon: 'user' }
       },
+      {
+        path: 'eventDetails',
+        component: () => import('@/views/accessible-events/detail.vue'),
+        name: 'eventDetails',
+        meta: { title: 'Event-details', icon: 'user' }
+      },
 
     ]
   },

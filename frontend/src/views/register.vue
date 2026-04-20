@@ -82,7 +82,7 @@ const registerForm = ref({
 
 const equalToPassword = (rule, value, callback) => {
   if (registerForm.value.password !== value) {
-    callback(new Error("两次输入的密码不一致"))
+    callback(new Error("The two passwords did not match"))
   } else {
     callback()
   }
@@ -90,16 +90,16 @@ const equalToPassword = (rule, value, callback) => {
 
 const registerRules = {
   username: [
-    { required: true, trigger: "blur", message: "请输入您的账号" },
-    { min: 2, max: 20, message: "用户账号长度必须介于 2 和 20 之间", trigger: "blur" }
+    { required: true, trigger: "blur", message: "Please enter your account" },
+    { min: 2, max: 20, message: "User account length must be between 2 and 20", trigger: "blur" }
   ],
   password: [
-    { required: true, trigger: "blur", message: "请输入您的密码" },
-    { min: 5, max: 20, message: "用户密码长度必须介于 5 和 20 之间", trigger: "blur" },
-    { pattern: /^[^<>"'|\\]+$/, message: "不能包含非法字符：< > \" ' \\\ |", trigger: "blur" }
+    { required: true, trigger: "blur", message: "Please enter your password" },
+    { min: 5, max: 20, message: "User passwords must be between 5 and 20 characters long", trigger: "blur" },
+    { pattern: /^[^<>"'|\\]+$/, message: "Cannot contain illegal characters：< > \" ' \\\ |", trigger: "blur" }
   ],
   confirmPassword: [
-    { required: true, trigger: "blur", message: "请再次输入您的密码" },
+    { required: true, trigger: "blur", message: "Please enter your password again" },
     { required: true, validator: equalToPassword, trigger: "blur" }
   ],
 }
@@ -114,7 +114,7 @@ function handleRegister() {
       loading.value = true
       register(registerForm.value).then(res => {
         const username = registerForm.value.username
-        ElMessageBox.alert("<font color='red'>恭喜你，您的账号 " + username + " 注册成功！</font>", "系统提示", {
+        ElMessageBox.alert("<font color='red'>Congratulations, your account " + username + " Registration successful！</font>", "System prompt", {
           dangerouslyUseHTMLString: true,
           type: "success",
         }).then(() => {

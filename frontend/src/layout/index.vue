@@ -1,11 +1,11 @@
 <template>
   <div :class="classObj" class="app-wrapper" :style="{ '--current-color': theme }">
     <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside"/>
-    <sidebar v-if="!sidebar.hide" class="sidebar-container" />
-    <div :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" class="main-container">
+     <!--<sidebar v-if="!sidebar.hide" class="sidebar-container" /> -->
+    <div :class="{ hasTagsView: needTagsView, sidebarHide: true }" class="main-container">
       <div :class="{ 'fixed-header': fixedHeader }">
         <navbar @setLayout="setLayout" />
-        <tags-view v-if="needTagsView" />
+        <!--<tags-view v-if="needTagsView" />-->
       </div>
       <app-main />
       <settings ref="settingRef" />
@@ -83,6 +83,9 @@ function setLayout() {
   overflow: hidden;
 }
 
+:deep(.main-container) {
+  margin-left: 0 !important;
+}
 .drawer-bg {
   background: #000;
   opacity: 0.3;
