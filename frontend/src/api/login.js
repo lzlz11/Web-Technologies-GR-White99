@@ -1,19 +1,18 @@
 import request from '@/utils/request'
 
 // 登录方法
-export function login(username, password) {
-  const data = {
-    email: username,
-    password,
-  }
+export function login(data) {
   return request({
-    url: '/api/auth/debug',
+    url: '/api/auth/login',
     headers: {
       isToken: false,
       repeatSubmit: false
     },
     method: 'post',
-    data: data
+    data: {
+      email:data.email,
+      password: data.password
+    }
   })
 }
 

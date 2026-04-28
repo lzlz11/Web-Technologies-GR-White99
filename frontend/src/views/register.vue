@@ -47,8 +47,8 @@
             placeholder="Select Role"
             style="width:100%"
           >
-            <el-option label="User" value="user" />
-            <el-option label="Admin" value="admin" />
+            <el-option label="PARENT" value="PARENT" />
+
           </el-select>
         </el-form-item>
 
