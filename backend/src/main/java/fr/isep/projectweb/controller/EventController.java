@@ -1,13 +1,13 @@
 package fr.isep.projectweb.controller;
 
 import fr.isep.projectweb.model.dto.request.EventRequest;
-import fr.isep.projectweb.model.entity.Event;
-import fr.isep.projectweb.model.entity.User;
+import fr.isep.projectweb.model.dto.response.EventResponse;
 import fr.isep.projectweb.model.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,52 +26,57 @@ public class EventController {
 
     @PostMapping
     @Operation(summary = "Create an event")
-    public Event createEvent(@RequestBody EventRequest request, @AuthenticationPrincipal User user) {
-        return eventService.createEvent(request, user);
+    public EventResponse createEvent(@RequestBody EventRequest request, @AuthenticationPrincipal Jwt jwt) {
+        return eventService.createEvent(request, jwt);
     }
 
     @GetMapping
-    @Operation(summary = "Get all events")
-    public List<Event> getAllEvents() {
-        return eventService.getAllEvents();
+    @Operation(summary = "Get events for the main activity page")
+    public List<EventResponse> getEvents(@RequestParam(required = false) String keyword,
+                                         @RequestParam(required = false) String category,
+                                         @RequestParam(required = false) String status,
+                                         @RequestParam(required = false) UUID locationId,
+                                         @RequestParam(required = false) Boolean upcomingOnly,
+                                         @RequestParam(required = false) Integer limit) {
+        return eventService.getMainPageEvents(keyword, category, status, locationId, upcomingOnly, limit);
     }
 
     @GetMapping("/organizer/{organizerId}")
     @Operation(summary = "Get events by organizer id")
-    public List<Event> getEventsByOrganizerId(@PathVariable UUID organizerId) {
+    public List<EventResponse> getEventsByOrganizerId(@PathVariable UUID organizerId) {
         return eventService.getEventsByOrganizerId(organizerId);
     }
 
     @GetMapping("/location/{locationId}")
     @Operation(summary = "Get events by location id")
-    public List<Event> getEventsByLocationId(@PathVariable UUID locationId) {
+    public List<EventResponse> getEventsByLocationId(@PathVariable UUID locationId) {
         return eventService.getEventsByLocationId(locationId);
     }
 
     @GetMapping("/search")
     @Operation(summary = "Search events by keyword")
-    public List<Event> searchEvents(@RequestParam String keyword) {
+    public List<EventResponse> searchEvents(@RequestParam String keyword) {
         return eventService.searchEvents(keyword);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get one event by id")
-    public Event getEventById(@PathVariable UUID id) {
+    public EventResponse getEventById(@PathVariable UUID id) {
         return eventService.getEventById(id);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update an event")
-    public Event updateEvent(@PathVariable UUID id, @RequestBody EventRequest request) {
-        // TODO: Add authorization check to ensure only the organizer can update the event
-        return eventService.updateEvent(id, request);
+    public EventResponse updateEvent(@PathVariable UUID id,
+                                     @RequestBody EventRequest request,
+                                     @AuthenticationPrincipal Jwt jwt) {
+        return eventService.updateEvent(id, request, jwt);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete an event")
-    public ResponseEntity<Void> deleteEvent(@PathVariable UUID id) {
-        // TODO: Add authorization check to ensure only the organizer can delete the event
-        eventService.deleteEvent(id);
+    public ResponseEntity<Void> deleteEvent(@PathVariable UUID id, @AuthenticationPrincipal Jwt jwt) {
+        eventService.deleteEvent(id, jwt);
         return ResponseEntity.noContent().build();
     }
 }

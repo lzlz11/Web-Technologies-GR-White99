@@ -20,6 +20,26 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     @Query("""
             SELECT e
             FROM Event e
+            WHERE (:keyword IS NULL
+                    OR LOWER(COALESCE(e.title, '')) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                    OR LOWER(COALESCE(e.description, '')) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                    OR LOWER(COALESCE(e.category, '')) LIKE LOWER(CONCAT('%', :keyword, '%')))
+              AND (:category IS NULL OR LOWER(e.category) = LOWER(:category))
+              AND (:status IS NULL OR LOWER(e.status) = LOWER(:status))
+              AND (:locationId IS NULL OR e.location.id = :locationId)
+              AND (:upcomingOnly = false OR e.endTime >= CURRENT_TIMESTAMP)
+            ORDER BY e.startTime ASC
+            """)
+    List<Event> findForMainPage(@Param("keyword") String keyword,
+                                @Param("category") String category,
+                                @Param("status") String status,
+                                @Param("locationId") UUID locationId,
+                                @Param("upcomingOnly") boolean upcomingOnly,
+                                Pageable pageable);
+
+    @Query("""
+            SELECT e
+            FROM Event e
             WHERE LOWER(COALESCE(e.title, '')) LIKE LOWER(CONCAT('%', :keyword, '%'))
                OR LOWER(COALESCE(e.description, '')) LIKE LOWER(CONCAT('%', :keyword, '%'))
                OR LOWER(COALESCE(e.category, '')) LIKE LOWER(CONCAT('%', :keyword, '%'))
